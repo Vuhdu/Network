@@ -30,7 +30,4 @@ public:
 
 private:
 	NetworkType myType;
-	Server* myServer;
-	Client* myClient;
-
 };

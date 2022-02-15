@@ -6,7 +6,7 @@ const char* NetworkManager::GetServerIP()
     return myServerIP;
 }
 
-int NetworkManager::GetPort()
+unsigned short NetworkManager::GetPort()
 {
     return myPort;
 }

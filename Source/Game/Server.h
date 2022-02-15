@@ -7,6 +7,7 @@ class Server
 public:
 	static void Init();
 	static void Update();
+	static void Destroy();
 
 	template<typename T>
 	static void SendMessage(T& aBuffer, const unsigned short aClientID);
@@ -16,7 +17,7 @@ private:
 	inline static sockaddr_in myServerAddress;
 
 	inline static char myBuffer[BUFLEN];
-	inline static int myBufferLength;
+
 	inline static sockaddr_in myOtherAddress;
 	inline static int myOtherAddressLength;
 };

@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "NetMessage.h"
 
-NetMessage::NetMessage()
+NetMessage::NetMessage(MessageType aType)
 {
+	myType = aType;
 }
 
 unsigned short NetMessage::GetClientID() const

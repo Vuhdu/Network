@@ -32,7 +32,10 @@
 #define DRAW_BOX_RED(aPositionX, aPositionY, aWidth, aHeight) Tga2D::CDebugDrawer::DrawLine({ aPositionX - aWidth * .5f, aPositionY - aHeight * .5f }, { aPositionX + aWidth * .5f, aPositionY - aHeight * .5f }, { 1.0f, 0.0f, 0.0f, 0.5f }); Tga2D::CDebugDrawer::DrawLine({ aPositionX + aWidth * .5f, aPositionY - aHeight * .5f }, { aPositionX + aWidth * .5f, aPositionY + aHeight * .5f }, { 1.0f, 0.0f, 0.0f, 0.5f }); Tga2D::CDebugDrawer::DrawLine({ aPositionX + aWidth * .5f, aPositionY + aHeight * .5f }, { aPositionX - aWidth * .5f, aPositionY + aHeight * .5f }, { 1.0f, 0.0f, 0.0f, 0.5f }); Tga2D::CDebugDrawer::DrawLine({ aPositionX - aWidth * .5f, aPositionY + aHeight * .5f }, { aPositionX - aWidth * .5f, aPositionY - aHeight * .5f }, { 1.0f, 0.0f, 0.0f, 0.5f });
 #define DRAW_BOX_YELLOW(aPositionX, aPositionY, aWidth, aHeight) Tga2D::CDebugDrawer::DrawLine({ aPositionX - aWidth * .5f, aPositionY - aHeight * .5f }, { aPositionX + aWidth * .5f, aPositionY - aHeight * .5f }, { 1.0f, 1.0f, 0.0f, 1.0f }); Tga2D::CDebugDrawer::DrawLine({ aPositionX + aWidth * .5f, aPositionY - aHeight * .5f }, { aPositionX + aWidth * .5f, aPositionY + aHeight * .5f }, { 1.0f, 1.0f, 0.0f, 1.0f }); Tga2D::CDebugDrawer::DrawLine({ aPositionX + aWidth * .5f, aPositionY + aHeight * .5f }, { aPositionX - aWidth * .5f, aPositionY + aHeight * .5f }, { 1.0f, 1.0f, 0.0f, 1.0f }); Tga2D::CDebugDrawer::DrawLine({ aPositionX - aWidth * .5f, aPositionY + aHeight * .5f }, { aPositionX - aWidth * .5f, aPositionY - aHeight * .5f }, { 1.0f, 1.0f, 0.0f, 1.0f });
 
+
 #define BUFLEN 576
+#define PORT 13371
+#define SERVER "127.0.0.1"
 
 #include "Vector.h"
 #include "InputHandler.h"

@@ -3,14 +3,20 @@
 enum class MessageType
 {
 	None,
+	Ping,
+
 	ClientConnect,
-	ClientDisconnect
+	ClientDisconnect,
+	ServerApproveConnection
 };
 
 class NetMessage
 {
 public:
-	NetMessage();
+	NetMessage() = delete;
+	NetMessage(NetMessage&) = delete;
+
+	NetMessage(MessageType aType);
 
 	unsigned short GetClientID() const;
 	void SetClientID(const unsigned short aClientID);
