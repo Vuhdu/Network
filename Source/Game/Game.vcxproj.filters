@@ -49,6 +49,10 @@
       <Filter>Networking</Filter>
     </ClInclude>
     <ClInclude Include="DestroyObjectMessage.h" />
+    <ClInclude Include="FunPark.h" />
+    <ClInclude Include="GuaranteeManager.h">
+      <Filter>Networking</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -77,5 +81,11 @@
     <ClCompile Include="InstantiateMessage.cpp" />
     <ClCompile Include="PositionUpdateMessage.cpp" />
     <ClCompile Include="DestroyObjectMessage.cpp" />
+    <ClCompile Include="FunPark.cpp" />
+    <ClCompile Include="GuaranteeResponse.h">
+      <Filter>Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="GuaranteeResponse.cpp" />
+    <ClCompile Include="GuaranteeManager.cpp" />
   </ItemGroup>
 </Project>

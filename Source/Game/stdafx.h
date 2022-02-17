@@ -46,6 +46,7 @@
 
 #include "GameObjectManager.h"
 #include "GameObject.h"
+#include "GuaranteeManager.h"
 
 namespace CU = CommonUtilities;
 

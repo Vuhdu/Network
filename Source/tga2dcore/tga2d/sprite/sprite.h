@@ -34,7 +34,7 @@ namespace Tga2D
 		void Render();
 		/* Set a normalized position on the sprite*/
 		void SetPosition(const VECTOR2F& aPosition);
-		const VECTOR2F& GetPosition() const;
+		VECTOR2F& GetPosition();
 
 		void SetPivot(const VECTOR2F& aPivot);
 		const VECTOR2F& GetPivot() const;

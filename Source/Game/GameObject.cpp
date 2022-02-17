@@ -6,6 +6,8 @@
 
 #include "Mathcu.hpp"
 
+#include "GameWorld.h"
+
 GameObject::GameObject()
 {
 	mySprite = new Tga2D::CSprite("sprites/player.dds");
@@ -61,7 +63,11 @@ void GameObject::Update(CU::InputHandler& anInput)
 			PositionUpdateMessage msg;
 			msg.SetGameObjectID(myGameObjectID);
 			msg.SetPosition(mySprite->GetPosition());
-			Client::SendMessage(msg);
+
+			if (CGameWorld::GetNetType() == NetworkType::Client)
+				Client::SendMessage(msg);
+			else
+				Server::SendMessageAll(msg);
 		}
 	}
 	else
@@ -98,6 +104,16 @@ int GameObject::GetGameObjectID() const
 void GameObject::SetPosition(const Tga2D::Vector2f& aPosition)
 {
 	mySprite->SetPosition(aPosition);
+}
+
+const Tga2D::Vector2f& GameObject::GetPosition() const
+{
+	return mySprite->GetPosition();
+}
+
+Tga2D::Vector2f& GameObject::Position()
+{
+	return mySprite->GetPosition();
 }
 
 void GameObject::SetLerpPos(const Tga2D::Vector2f& aPosition)

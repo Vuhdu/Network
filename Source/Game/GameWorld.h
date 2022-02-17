@@ -28,6 +28,8 @@ public:
 
 	void SetNetworkType(const NetworkType aType);
 
+	static NetworkType GetNetType();
+
 private:
-	NetworkType myType;
+	inline static NetworkType myType;
 };

@@ -11,7 +11,9 @@ enum class MessageType
 
 	InstantiateGameObject,
 	PositionUpdate,
-	DestroyGameObject
+	DestroyGameObject,
+
+	GuaranteeResponse
 };
 
 class NetMessage
@@ -19,6 +21,7 @@ class NetMessage
 protected:
 	MessageType myType = MessageType::None;
 	bool myIsGuaranteed = false;
+	int myMessageID = -1;
 	unsigned short myClientID = -1;
 	char myBuffer[552];
 
@@ -31,6 +34,9 @@ public:
 	unsigned short GetClientID() const;
 	void SetClientID(const unsigned short aClientID);
 
+	int GetMessageID() const;
+	void SetMessageID(const int aMessageID);
+	
 	void SetGuaranteed(const bool aValue);
 	bool IsGuaranteed() const;
 

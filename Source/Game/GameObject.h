@@ -20,6 +20,8 @@ public:
 	int GetGameObjectID() const;
 
 	void SetPosition(const Tga2D::Vector2f& aPosition);
+	const Tga2D::Vector2f& GetPosition() const;
+	Tga2D::Vector2f& Position();
 
 	void SetLerpPos(const Tga2D::Vector2f& aPosition);
 

@@ -16,6 +16,16 @@ void NetMessage::SetClientID(const unsigned short aClientID)
 	myClientID = aClientID;
 }
 
+int NetMessage::GetMessageID() const
+{
+	return myMessageID;
+}
+
+void NetMessage::SetMessageID(const int aMessageID)
+{
+	myMessageID = aMessageID;
+}
+
 void NetMessage::SetGuaranteed(const bool aValue)
 {
 	myIsGuaranteed = aValue;

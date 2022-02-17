@@ -5,6 +5,8 @@
 #include "Server.h"
 #include "Client.h"
 
+#include "FunPark.h"
+
 CGameWorld::CGameWorld()
 {	
 }
@@ -47,6 +49,7 @@ void CGameWorld::Update(CU::InputHandler& anInput, const float aDeltaTime)
 		break;
 	case NetworkType::Server:
 		Server::Update();
+		FunPark::Update();
 		break;
 	default:
 		break;
@@ -62,4 +65,9 @@ void CGameWorld::Render()
 void CGameWorld::SetNetworkType(const NetworkType aType)
 {
 	myType = aType;
+}
+
+NetworkType CGameWorld::GetNetType()
+{
+	return myType;
 }

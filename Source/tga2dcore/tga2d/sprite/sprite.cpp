@@ -95,7 +95,7 @@ void Tga2D::CSprite::SetPosition(const VECTOR2F& aPosition)
 	myQuad->myPosition = aPosition;
 }
 
-const VECTOR2F& Tga2D::CSprite::GetPosition() const
+VECTOR2F& Tga2D::CSprite::GetPosition()
 {
 	return myQuad->myPosition;
 }
