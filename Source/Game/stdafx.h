@@ -42,6 +42,10 @@
 #include "NetworkManager.h"
 #include "ClientManager.h"
 #include "Server.h"
+#include "Client.h"
+
+#include "GameObjectManager.h"
+#include "GameObject.h"
 
 namespace CU = CommonUtilities;
 

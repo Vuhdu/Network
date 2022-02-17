@@ -39,6 +39,16 @@
     <ClInclude Include="ClientManager.h" />
     <ClInclude Include="ClientInfo.h" />
     <ClInclude Include="ApproveConnection.h" />
+    <ClInclude Include="ClientDisconnect.h">
+      <Filter>Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectManager.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="InstantiateMessage.h" />
+    <ClInclude Include="PositionUpdateMessage.h">
+      <Filter>Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="DestroyObjectMessage.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -61,5 +71,11 @@
     </ClCompile>
     <ClCompile Include="ClientManager.cpp" />
     <ClCompile Include="ApproveConnection.cpp" />
+    <ClCompile Include="ClientDisconnect.cpp" />
+    <ClCompile Include="GameObjectManager.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="InstantiateMessage.cpp" />
+    <ClCompile Include="PositionUpdateMessage.cpp" />
+    <ClCompile Include="DestroyObjectMessage.cpp" />
   </ItemGroup>
 </Project>

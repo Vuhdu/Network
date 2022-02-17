@@ -137,12 +137,18 @@
     <ClInclude Include="ApproveConnection.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="ClientConnect.h" />
+    <ClInclude Include="ClientDisconnect.h" />
     <ClInclude Include="ClientInfo.h" />
     <ClInclude Include="ClientManager.h" />
+    <ClInclude Include="DestroyObjectMessage.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="GameWorld.h" />
+    <ClInclude Include="InstantiateMessage.h" />
     <ClInclude Include="NetMessage.h" />
     <ClInclude Include="NetworkManager.h" />
+    <ClInclude Include="PositionUpdateMessage.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="stdafx.h" />
@@ -152,11 +158,17 @@
     <ClCompile Include="ApproveConnection.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="ClientConnect.cpp" />
+    <ClCompile Include="ClientDisconnect.cpp" />
     <ClCompile Include="ClientManager.cpp" />
+    <ClCompile Include="DestroyObjectMessage.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="GameWorld.cpp" />
+    <ClCompile Include="InstantiateMessage.cpp" />
     <ClCompile Include="NetMessage.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
+    <ClCompile Include="PositionUpdateMessage.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

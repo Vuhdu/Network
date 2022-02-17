@@ -51,6 +51,8 @@ void CGameWorld::Update(CU::InputHandler& anInput, const float aDeltaTime)
 	default:
 		break;
 	}
+
+	GameObjectManager::Update(anInput);
 }
 
 void CGameWorld::Render()

@@ -3,6 +3,10 @@
 
 #include "ClientConnect.h"
 #include "ApproveConnection.h"
+#include "ClientDisconnect.h"
+#include "InstantiateMessage.h"
+#include "PositionUpdateMessage.h"
+#include "DestroyObjectMessage.h"
 
 void Client::Init()
 {
@@ -32,39 +36,48 @@ void Client::Init()
 
 void Client::Update(CU::InputHandler& anInput)
 {
-	if (anInput.IsKeyDown(CU::eKeyCode::Y))
-	{
-		Ping msg;
-		if (sendto(mySocket, (const char*)&msg, sizeof(Ping), 0, (struct sockaddr*)&myServerAddress, myServerAddressLength) == SOCKET_ERROR)
-		{
-			INFO_PRINT("Failed to ping from client.");
-		}
-		else
-		{
-			INFO_PRINT("Attempting to ping from client.");
-		}
-	}
-
 	memset(myBuffer, '\0', BUFLEN);
 
 	if (recvfrom(mySocket, myBuffer, BUFLEN, 0, (struct sockaddr*)&myServerAddress, &myServerAddressLength) != SOCKET_ERROR)
 	{
-		MessageType type = *(MessageType*)myBuffer[0];
+		const char* buf = (const char*)&myBuffer;
+		MessageType type = *(MessageType*)&buf[8];
 		INFO_PRINT("Received message from server");
 
 		switch (type)
 		{
 		case MessageType::ServerApproveConnection:
 		{
-			ApproveConnection* msg = (ApproveConnection*)myBuffer[0];
+			ApproveConnection* msg = (ApproveConnection*)buf;
 			msg->AsClient(myServerAddress, myServerAddressLength);
 		} break;
+
+		case MessageType::InstantiateGameObject:
+		{
+			InstantiateMessage* msg = (InstantiateMessage*)buf;
+			msg->AsClient(myServerAddress, myServerAddressLength);
+		}break;
+
+		case MessageType::PositionUpdate:
+		{
+			PositionUpdateMessage* msg = (PositionUpdateMessage*)buf;
+			msg->AsClient(myServerAddress, myServerAddressLength);
+		}break;
+
+		case MessageType::DestroyGameObject:
+		{
+			DestroyObjectMessage* msg = (DestroyObjectMessage*)buf;
+			msg->AsClient(myServerAddress, myServerAddressLength);
+		}break;
 		}
 	}
 }
 
 void Client::Destroy()
 {
+	ClientDisconnect msg;
+	SendMessage(msg);
+
 	closesocket(mySocket);
 	WSACleanup();
 }
@@ -72,4 +85,9 @@ void Client::Destroy()
 void Client::SetClientID(const unsigned short aClientID)
 {
 	myClientID = aClientID;
+}
+
+unsigned short Client::GetClientID()
+{
+	return myClientID;
 }

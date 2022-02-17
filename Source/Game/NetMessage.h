@@ -7,11 +7,21 @@ enum class MessageType
 
 	ClientConnect,
 	ClientDisconnect,
-	ServerApproveConnection
+	ServerApproveConnection,
+
+	InstantiateGameObject,
+	PositionUpdate,
+	DestroyGameObject
 };
 
 class NetMessage
 {
+protected:
+	MessageType myType = MessageType::None;
+	bool myIsGuaranteed = false;
+	unsigned short myClientID = -1;
+	char myBuffer[552];
+
 public:
 	NetMessage() = delete;
 	NetMessage(NetMessage&) = delete;
@@ -26,11 +36,5 @@ public:
 
 	virtual void AsServer(sockaddr_in aSocket, int aLength) = 0;
 	virtual void AsClient(sockaddr_in aSocket, int aLength) = 0;
-
-protected:
-	MessageType myType = MessageType::None;
-	bool myIsGuaranteed = false;
-	unsigned short myClientID = -1;
-	char myBuffer[568];
 };
 

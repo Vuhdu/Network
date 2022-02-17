@@ -11,6 +11,7 @@ public:
 	static void SendMessage(T& aMessage);
 
 	static void SetClientID(const unsigned short aClientID);
+	static unsigned short GetClientID();
 
 private:
 	inline static SOCKET mySocket;

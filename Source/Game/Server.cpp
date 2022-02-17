@@ -4,6 +4,11 @@
 #include "NetMessage.h"
 
 #include "ClientConnect.h"
+#include "ClientDisconnect.h"
+
+#include "InstantiateMessage.h"
+#include "PositionUpdateMessage.h"
+#include "DestroyObjectMessage.h"
 
 void Server::Init()
 {
@@ -41,23 +46,46 @@ void Server::Init()
 void Server::Update()
 {
 	memset(myBuffer, '\0', BUFLEN);
+	
 	if (recvfrom(mySocket, myBuffer, BUFLEN, 0, (struct sockaddr*)&myOtherAddress, &myOtherAddressLength) != SOCKET_ERROR)
 	{
 		INFO_PRINT("Received message from client");
-		MessageType type = (MessageType)myBuffer[0];
+
+		const char* buf = (const char*)&myBuffer;
+		MessageType type = *(MessageType*)&buf[8];
 		bool isGuaranteed = myBuffer[sizeof(MessageType)];
 
 		switch (type)
 		{
 		case MessageType::ClientConnect:
 		{
-			ClientConnect* msg = (ClientConnect*)myBuffer;
+			ClientConnect* msg = (ClientConnect*)buf;
 			msg->AsServer(myOtherAddress, myOtherAddressLength);
 		} break;
 
 		case MessageType::ClientDisconnect:
+		{
+			ClientDisconnect* msg = (ClientDisconnect*)buf;
+			msg->AsServer(myOtherAddress, myOtherAddressLength);
+		} break;
 
-			break;
+		case MessageType::InstantiateGameObject:
+		{
+			InstantiateMessage* msg = (InstantiateMessage*)buf;
+			msg->AsServer(myOtherAddress, myOtherAddressLength);
+		}break;
+
+		case MessageType::PositionUpdate:
+		{
+			PositionUpdateMessage* msg = (PositionUpdateMessage*)buf;
+			msg->AsServer(myOtherAddress, myOtherAddressLength);
+		}break;
+
+		case MessageType::DestroyGameObject:
+		{
+			DestroyObjectMessage* msg = (DestroyObjectMessage*)buf;
+			msg->AsServer(myOtherAddress, myOtherAddressLength);
+		}break;
 		}
 	}
 }
