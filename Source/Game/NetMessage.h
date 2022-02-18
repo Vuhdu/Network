@@ -31,6 +31,8 @@ public:
 
 	NetMessage(MessageType aType);
 
+	MessageType GetType() const;
+
 	unsigned short GetClientID() const;
 	void SetClientID(const unsigned short aClientID);
 

@@ -23,19 +23,32 @@ void ClientManager::RemoveClient(const unsigned short aClientID)
 		}
 	}
 
-	assert(false);
+	//assert(false);
 }
 
-const ClientInfo& ClientManager::GetClient(const unsigned short aClientID)
+const ClientInfo const* ClientManager::GetClient(const unsigned short aClientID)
 {
 	for (auto& ref : myClients)
 	{
 		if (ref.myClientID == aClientID)
-			return ref;
+			return &ref;
 	}
+
+	return nullptr;
 }
 
 const std::vector<ClientInfo>& ClientManager::GetAllClients()
 {
 	return myClients;
+}
+
+bool ClientManager::HasClient(const unsigned short aClientID)
+{
+	for (auto& client : myClients)
+	{
+		if (client.myClientID == aClientID)
+			return true;
+	}
+
+	return false;
 }

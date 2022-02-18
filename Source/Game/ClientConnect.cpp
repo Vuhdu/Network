@@ -5,7 +5,9 @@
 
 ClientConnect::ClientConnect()
 	: NetMessage(MessageType::ClientConnect)
-{ }
+{ 
+	SetGuaranteed(true);
+}
 
 void ClientConnect::AsServer(sockaddr_in aSocket, int aLength)
 {

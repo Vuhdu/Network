@@ -56,6 +56,7 @@ void CGameWorld::Update(CU::InputHandler& anInput, const float aDeltaTime)
 	}
 
 	GameObjectManager::Update(anInput);
+	GuaranteeManager::Update();
 }
 
 void CGameWorld::Render()

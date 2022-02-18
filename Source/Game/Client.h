@@ -10,10 +10,17 @@ public:
 	static void Destroy();
 
 	template<typename T>
-	static void SendMessage(T& aMessage, bool aIgnoreGuarantee = false);
+	static void SendMessage(T& aMessage);
 
 	static void SetClientID(const unsigned short aClientID);
 	static unsigned short GetClientID();
+
+private:
+	friend class GuaranteeManager;
+
+	static void SendMessageInternal(const char* aBuffer, const int aLength);
+
+	static void SendGuaranteeResponse(const int aMessageID);
 
 private:
 	inline static SOCKET mySocket;
@@ -25,19 +32,22 @@ private:
 
 	inline static unsigned short myClientID = serverDefaultID;
 	inline static int myNextMessageID = 1;
+	inline static int myUniqueID = 0;
 };
 
 template<typename T>
-inline void Client::SendMessage(T& aMessage, bool aIgnoreGuarantee = false)
+inline void Client::SendMessage(T& aMessage)
 {
 	static_assert(std::is_base_of<NetMessage, T>::value, "Template type is not a NetMessage.");
 	NetMessage* msg = dynamic_cast<NetMessage*>(&aMessage);
 	msg->SetClientID(myClientID);
 	msg->SetMessageID(myNextMessageID++);
 
-	auto res = sendto(mySocket, (const char*)&aMessage, sizeof(T), 0, (struct sockaddr*)&myServerAddress, myServerAddressLength);
-	assert(res != SOCKET_ERROR);
+	if (msg->GetType() == MessageType::ClientConnect)
+		msg->SetMessageID(myUniqueID);
 
-	if (msg->IsGuaranteed() && !aIgnoreGuarantee)
+	SendMessageInternal((const char*)&aMessage, sizeof(T));
+
+	if (msg->IsGuaranteed())
 		GuaranteeManager::AwaitResponse(aMessage, serverDefaultID);
 }

@@ -10,13 +10,22 @@ public:
 	static void Destroy();
 
 	template<typename T>
-	static void SendMessage(T& aBuffer, const unsigned short aClientID, bool aIgnoreGuarantee = false);
+	static void SendMessage(T& aBuffer, const unsigned short aClientID);
 
 	template<typename T>
-	static void SendMessageOthers(T& aBuffer, const unsigned short aExceptID, bool aIgnoreGuarantee = false);
+	static void SendMessageOthers(T& aBuffer, const unsigned short aExceptID);
 
 	template<typename T>
-	static void SendMessageAll(T& aBuffer, bool aIgnoreGuarantee = false);
+	static void SendMessageAll(T& aBuffer);
+
+	static void TimeoutClient(const unsigned short aClientID);
+
+private:
+	friend class GuaranteeManager;
+
+	static void SendMessageInternal(const char* aBuffer, const int aLength, const unsigned short aClientID);
+
+	static void SendGuaranteeResponse(const unsigned short aClientID, const int aMessageID);
 
 private:
 	inline static SOCKET mySocket;
@@ -27,43 +36,41 @@ private:
 	inline static sockaddr_in myOtherAddress;
 	inline static int myOtherAddressLength;
 
-	int myNextMessageID = 1;
+	inline static int myNextMessageID = 1;
 };
 
 template<typename T>
-inline void Server::SendMessage(T& aBuffer, const unsigned short aClientID, bool aIgnoreGuarantee = false)
+inline void Server::SendMessage(T& aBuffer, const unsigned short aClientID)
 {
 	static_assert(std::is_base_of<NetMessage, T>::value, "Template type is not a NetMessage.");
-	NetMessage* msg = dynamic_cast<NetMessage*>(&aMessage);
+	NetMessage* msg = dynamic_cast<NetMessage*>(&aBuffer);
 	msg->SetMessageID(myNextMessageID++);
 
-	const ClientInfo& clientInfo = ClientManager::GetClient(aClientID);
-	auto res = sendto(mySocket, (const char*)&aBuffer, sizeof(T), 0, (const sockaddr*)&clientInfo.myAddress, clientInfo.myLength);
-	assert(res != SOCKET_ERROR);
+	SendMessageInternal((const char*)&aBuffer, sizeof(T), aClientID);
 
-	if (msg->IsGuaranteed() && !aIgnoreGuarantee)
+	if (msg->IsGuaranteed())
 	{
 		GuaranteeManager::AwaitResponse(aBuffer, aClientID);
 	}
 }
 
 template<typename T>
-inline void Server::SendMessageOthers(T& aBuffer, const unsigned short aExceptID, bool aIgnoreGuarantee = false)
+inline void Server::SendMessageOthers(T& aBuffer, const unsigned short aExceptID)
 {
 	for (auto& client : ClientManager::GetAllClients())
 	{
 		if (client.myClientID == aExceptID)
 			continue;
 
-		SendMessage(aBuffer, client.myClientID, aIgnoreGuarantee);
+		SendMessage(aBuffer, client.myClientID);
 	}
 }
 
 template<typename T>
-inline void Server::SendMessageAll(T& aBuffer, bool aIgnoreGuarantee = false)
+inline void Server::SendMessageAll(T& aBuffer)
 {
 	for (auto& client : ClientManager::GetAllClients())
 	{
-		SendMessage(aBuffer, client.myClientID, aIgnoreGuarantee);
+		SendMessage(aBuffer, client.myClientID);
 	}
 }

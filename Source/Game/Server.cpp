@@ -9,6 +9,7 @@
 #include "InstantiateMessage.h"
 #include "PositionUpdateMessage.h"
 #include "DestroyObjectMessage.h"
+#include "GuaranteeResponse.h"
 
 void Server::Init()
 {
@@ -49,11 +50,33 @@ void Server::Update()
 	
 	if (recvfrom(mySocket, myBuffer, BUFLEN, 0, (struct sockaddr*)&myOtherAddress, &myOtherAddressLength) != SOCKET_ERROR)
 	{
-		INFO_PRINT("Received message from client");
+		//INFO_PRINT("Received message from client");
 
 		const char* buf = (const char*)&myBuffer;
-		MessageType type = *(MessageType*)&buf[8];
-		bool isGuaranteed = myBuffer[sizeof(MessageType)];
+		NetMessage* net_msg = (NetMessage*)buf;
+
+		MessageType type = net_msg->GetType();
+		bool isGuaranteed = net_msg->IsGuaranteed();
+		int messageID = net_msg->GetMessageID();
+		unsigned short clientID = net_msg->GetClientID();
+		if (type != MessageType::ClientConnect && !ClientManager::HasClient(clientID))
+		{
+			return;
+		}
+
+		if (GuaranteeManager::IsHandled(clientID, messageID) && isGuaranteed)
+		{
+			SendGuaranteeResponse(clientID, messageID);
+			INFO_PRINT("Message already handled from client: %i with message id: %i", clientID, messageID);
+			return;
+		}
+
+		if (isGuaranteed)
+		{
+			SendGuaranteeResponse(clientID, messageID);
+			GuaranteeManager::AddHandledMessage(clientID, messageID);
+			INFO_PRINT("Received a guaranteed message from client: %i with message id: %i", clientID, messageID);
+		}
 
 		switch (type)
 		{
@@ -86,6 +109,12 @@ void Server::Update()
 			DestroyObjectMessage* msg = (DestroyObjectMessage*)buf;
 			msg->AsServer(myOtherAddress, myOtherAddressLength);
 		}break;
+
+		case MessageType::GuaranteeResponse:
+		{
+			GuaranteeResponse* msg = (GuaranteeResponse*)buf;
+			msg->AsServer(myOtherAddress, myOtherAddressLength);
+		}break;
 		}
 	}
 }
@@ -94,4 +123,32 @@ void Server::Destroy()
 {
 	closesocket(mySocket);
 	WSACleanup();
+}
+
+void Server::TimeoutClient(const unsigned short aClientID)
+{
+	INFO_PRINT("Timedout client with ID: %i.", aClientID);
+	ClientManager::RemoveClient(aClientID);
+}
+
+void Server::SendMessageInternal(const char* aBuffer, const int aLength, const unsigned short aClientID)
+{
+	const ClientInfo const* clientInfo = ClientManager::GetClient(aClientID);
+
+	int result;
+	
+	if (clientInfo)
+		result = sendto(mySocket, aBuffer, aLength, 0, (const sockaddr*)&clientInfo->myAddress, clientInfo->myLength);
+	else
+		result = sendto(mySocket, aBuffer, aLength, 0, (const sockaddr*)&myOtherAddress, myOtherAddressLength);
+
+	assert(result != SOCKET_ERROR);
+}
+
+void Server::SendGuaranteeResponse(const unsigned short aClientID, const int aMessageID)
+{
+	GuaranteeResponse msg;
+	msg.SetMessageID(aMessageID);
+	msg.SetClientID(Client::GetClientID());
+	SendMessageInternal((const char*)&msg, sizeof(GuaranteeResponse), aClientID);
 }

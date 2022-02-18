@@ -6,6 +6,11 @@ NetMessage::NetMessage(MessageType aType)
 	myType = aType;
 }
 
+MessageType NetMessage::GetType() const
+{
+	return myType;
+}
+
 unsigned short NetMessage::GetClientID() const
 {
 	return myClientID;

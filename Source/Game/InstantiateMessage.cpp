@@ -4,6 +4,7 @@
 InstantiateMessage::InstantiateMessage()
 	: NetMessage(MessageType::InstantiateGameObject)
 {
+	SetGuaranteed(true);
 }
 
 void InstantiateMessage::AsServer(sockaddr_in aSocket, int aLength)

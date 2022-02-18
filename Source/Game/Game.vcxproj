@@ -147,6 +147,7 @@
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="GameWorld.h" />
     <ClInclude Include="GuaranteeManager.h" />
+    <ClInclude Include="GuaranteeResponse.h" />
     <ClInclude Include="InstantiateMessage.h" />
     <ClInclude Include="NetMessage.h" />
     <ClInclude Include="NetworkManager.h" />
@@ -170,7 +171,6 @@
     <ClCompile Include="GameWorld.cpp" />
     <ClCompile Include="GuaranteeManager.cpp" />
     <ClCompile Include="GuaranteeResponse.cpp" />
-    <ClCompile Include="GuaranteeResponse.h" />
     <ClCompile Include="InstantiateMessage.cpp" />
     <ClCompile Include="NetMessage.cpp" />
     <ClCompile Include="NetworkManager.cpp" />

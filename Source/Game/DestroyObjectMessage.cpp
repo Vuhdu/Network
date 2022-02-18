@@ -4,6 +4,7 @@
 DestroyObjectMessage::DestroyObjectMessage()
 	: NetMessage(MessageType::DestroyGameObject)
 {
+	SetGuaranteed(true);
 }
 
 void DestroyObjectMessage::AsServer(sockaddr_in aSocket, int aLength)
@@ -31,5 +32,7 @@ int DestroyObjectMessage::GetGameObjectID() const
 void DestroyObjectMessage::RemoveObject()
 {
 	auto ob = GameObjectManager::GetGameObject(myClientID, GetGameObjectID());
-	GameObjectManager::RemoveGameObject(ob);
+
+	if(ob)
+		GameObjectManager::RemoveGameObject(ob);
 }

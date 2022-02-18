@@ -8,8 +8,10 @@ public:
 	static const ClientInfo& AddClient(sockaddr_in anAddress, int aLength);
 	static void RemoveClient(const unsigned short aClientID);
 
-	static const ClientInfo& GetClient(const unsigned short aClientID);
+	static const ClientInfo const* GetClient(const unsigned short aClientID);
 	static const std::vector<ClientInfo>& GetAllClients();
+
+	static bool HasClient(const unsigned short aClientID);
 
 
 private:

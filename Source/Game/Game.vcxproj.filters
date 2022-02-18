@@ -53,6 +53,7 @@
     <ClInclude Include="GuaranteeManager.h">
       <Filter>Networking</Filter>
     </ClInclude>
+    <ClInclude Include="GuaranteeResponse.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -82,10 +83,7 @@
     <ClCompile Include="PositionUpdateMessage.cpp" />
     <ClCompile Include="DestroyObjectMessage.cpp" />
     <ClCompile Include="FunPark.cpp" />
-    <ClCompile Include="GuaranteeResponse.h">
-      <Filter>Networking</Filter>
-    </ClCompile>
-    <ClCompile Include="GuaranteeResponse.cpp" />
     <ClCompile Include="GuaranteeManager.cpp" />
+    <ClCompile Include="GuaranteeResponse.cpp" />
   </ItemGroup>
 </Project>

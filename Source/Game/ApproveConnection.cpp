@@ -7,6 +7,7 @@
 ApproveConnection::ApproveConnection()
 	: NetMessage(MessageType::ServerApproveConnection)
 {
+	SetGuaranteed(true);
 }
 
 void ApproveConnection::AsServer(sockaddr_in aSocket, int aLength)
@@ -17,7 +18,7 @@ void ApproveConnection::AsServer(sockaddr_in aSocket, int aLength)
 void ApproveConnection::AsClient(sockaddr_in aSocket, int aLength)
 {
 	Client::SetClientID(myClientID);
-	INFO_PRINT("Server connettion successful with ID: %i", myClientID);
+	INFO_PRINT("Connection successfull with ID: %i", myClientID);
 
 	GameObject* ob = GameObjectManager::AddGameObject(new GameObject());
 	ob->SetClientOwner(myClientID);

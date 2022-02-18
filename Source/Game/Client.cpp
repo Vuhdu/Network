@@ -7,9 +7,13 @@
 #include "InstantiateMessage.h"
 #include "PositionUpdateMessage.h"
 #include "DestroyObjectMessage.h"
+#include "GuaranteeResponse.h"
 
 void Client::Init()
 {
+	srand(time(0));
+	myUniqueID = rand();
+
 	WSADATA wsa;
 	myServerAddressLength = sizeof(myServerAddress);
 
@@ -41,8 +45,26 @@ void Client::Update(CU::InputHandler& anInput)
 	if (recvfrom(mySocket, myBuffer, BUFLEN, 0, (struct sockaddr*)&myServerAddress, &myServerAddressLength) != SOCKET_ERROR)
 	{
 		const char* buf = (const char*)&myBuffer;
-		MessageType type = *(MessageType*)&buf[8];
-		INFO_PRINT("Received message from server");
+		NetMessage* net_msg = (NetMessage*)buf;
+
+		MessageType type = net_msg->GetType();
+		bool isGuaranteed = net_msg->IsGuaranteed();
+		int messageID = net_msg->GetMessageID();
+		unsigned short clientID = net_msg->GetClientID();
+
+		if (GuaranteeManager::IsHandled(clientID, messageID) && isGuaranteed)
+		{
+			SendGuaranteeResponse(messageID);
+			INFO_PRINT("Message already handled from server with message id: %i", messageID);
+			return;
+		}
+
+		if (isGuaranteed)
+		{
+			SendGuaranteeResponse(messageID);
+			GuaranteeManager::AddHandledMessage(clientID, messageID);
+			INFO_PRINT("Received a guaranteed message from server with message id: %i", messageID);
+		}
 
 		switch (type)
 		{
@@ -69,6 +91,12 @@ void Client::Update(CU::InputHandler& anInput)
 			DestroyObjectMessage* msg = (DestroyObjectMessage*)buf;
 			msg->AsClient(myServerAddress, myServerAddressLength);
 		}break;
+
+		case MessageType::GuaranteeResponse:
+		{
+			GuaranteeResponse* msg = (GuaranteeResponse*)buf;
+			msg->AsClient(myServerAddress, myServerAddressLength);
+		}break;
 		}
 	}
 }
@@ -90,4 +118,18 @@ void Client::SetClientID(const unsigned short aClientID)
 unsigned short Client::GetClientID()
 {
 	return myClientID;
+}
+
+void Client::SendMessageInternal(const char* aBuffer, const int aLength)
+{
+	auto res = sendto(mySocket, aBuffer, aLength, 0, (struct sockaddr*)&myServerAddress, myServerAddressLength);
+	assert(res != SOCKET_ERROR);
+}
+
+void Client::SendGuaranteeResponse(const int aMessageID)
+{
+	GuaranteeResponse msg;
+	msg.SetMessageID(aMessageID);
+	msg.SetClientID(Client::GetClientID());
+	SendMessageInternal((const char*)&msg, sizeof(GuaranteeResponse));
 }
